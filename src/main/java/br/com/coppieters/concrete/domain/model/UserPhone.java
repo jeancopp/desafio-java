@@ -1,8 +1,6 @@
-package br.com.coppieters.concrete.model;
+package br.com.coppieters.concrete.domain.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +8,9 @@ import java.io.Serializable;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class UserPhone implements Serializable{
 
     @Id
@@ -26,4 +26,8 @@ public class UserPhone implements Serializable{
     @Column(length = 9)
     private String number;
 
+    @Override
+    public String toString() {
+        return "UserPhone{" +"id=" + id +", ddd='" + ddd + '\'' +", number='" + number + '\'' +'}';
+    }
 }
