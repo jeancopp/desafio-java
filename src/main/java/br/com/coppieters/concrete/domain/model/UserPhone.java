@@ -1,4 +1,4 @@
-package br.com.coppieters.concrete.model;
+package br.com.coppieters.concrete.domain.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

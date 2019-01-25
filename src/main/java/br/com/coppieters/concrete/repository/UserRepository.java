@@ -1,6 +1,6 @@
 package br.com.coppieters.concrete.repository;
 
-import br.com.coppieters.concrete.model.User;
+import br.com.coppieters.concrete.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

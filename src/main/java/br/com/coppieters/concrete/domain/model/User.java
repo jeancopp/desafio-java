@@ -1,8 +1,6 @@
-package br.com.coppieters.concrete.model;
+package br.com.coppieters.concrete.domain.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,7 +10,9 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
+@Builder(builderMethodName = "builder")
 public class User implements Serializable{
 
     @Id
