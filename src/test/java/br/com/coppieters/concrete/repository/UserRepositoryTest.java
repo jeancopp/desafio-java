@@ -10,9 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static br.com.coppieters.concrete.UserConstants.USER_EMAIL;
-import static br.com.coppieters.concrete.UserConstants.USER_NAME;
-import static br.com.coppieters.concrete.UserConstants.produceUser;
+import static br.com.coppieters.concrete.util.UserConstants.USER_EMAIL;
+import static br.com.coppieters.concrete.util.UserConstants.USER_NAME;
+import static br.com.coppieters.concrete.util.UserConstants.produceUser;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
@@ -37,7 +37,16 @@ public class UserRepositoryTest {
     @Test
     public void withEmailFromRecordedUser_WhenFindByEmail_FoundUser(){
         Optional<User> possibleUser = repository.findByEmail(this.mockedUser.getEmail());
+        validateUser(possibleUser);
+    }
 
+    @Test
+    public void withTOkenFromRecordedUser_WhenFindByToken_FoundUser(){
+        Optional<User> possibleUser = repository.findByToken(this.mockedUser.getToken());
+        validateUser(possibleUser);
+    }
+
+    private void validateUser(Optional<User> possibleUser) {
         assertTrue(possibleUser.isPresent());
 
         final User user = possibleUser.get();

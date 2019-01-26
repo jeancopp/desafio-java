@@ -6,6 +6,7 @@ import br.com.coppieters.concrete.domain.dto.UserInformationDto;
 import br.com.coppieters.concrete.domain.exception.UserRecordedPreviouslyException;
 import br.com.coppieters.concrete.domain.model.User;
 import br.com.coppieters.concrete.service.UserRegisterService;
+import br.com.coppieters.concrete.service.maker.UserInformationMaker;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,15 +26,7 @@ public class UserRegisterApi {
     public ResponseEntity<?> register(@RequestBody() @Valid UserDto dto) {
         try {
             final User user = service.register(dto);
-
-            UserInformationDto returnValue = UserInformationDto.builder()
-                    .user(dto)
-                    .created(user.getCreated())
-                    .lastLogin(user.getLastLogin())
-                    .modified(user.getModified())
-                    .id(user.getId())
-                    .token(user.getToken())
-                    .build();
+            UserInformationDto returnValue =informationMaker.make(user);
 
             return new ResponseEntity<>(returnValue, HttpStatus.CREATED);
         }catch(UserRecordedPreviouslyException e){
@@ -48,9 +41,11 @@ public class UserRegisterApi {
     }
 
     @Autowired
-    public UserRegisterApi(UserRegisterService service) {
+    public UserRegisterApi(UserRegisterService service, UserInformationMaker informationMaker) {
         this.service = service;
+        this.informationMaker = informationMaker;
     }
 
-    private UserRegisterService service;
+    private final UserRegisterService service;
+    private final UserInformationMaker informationMaker;
 }

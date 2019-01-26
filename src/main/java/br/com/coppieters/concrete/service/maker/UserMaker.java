@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMaker {
 
-
     public UserDto make(User user) {
 
         final UserDto dto = UserDto.builder()

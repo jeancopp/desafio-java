@@ -1,12 +1,14 @@
 package br.com.coppieters.concrete.api;
 
-import br.com.coppieters.concrete.UserConstants;
+import br.com.coppieters.concrete.util.UserConstants;
 import br.com.coppieters.concrete.domain.dto.ErrorMessageDto;
 import br.com.coppieters.concrete.domain.dto.UserDto;
 import br.com.coppieters.concrete.domain.dto.UserInformationDto;
 import br.com.coppieters.concrete.domain.exception.UserRecordedPreviouslyException;
 import br.com.coppieters.concrete.domain.model.User;
 import br.com.coppieters.concrete.service.UserRegisterService;
+import br.com.coppieters.concrete.service.maker.UserInformationMaker;
+import br.com.coppieters.concrete.util.UserInformatiomMakerFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static br.com.coppieters.concrete.UserConstants.*;
+import static br.com.coppieters.concrete.util.UserConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
@@ -28,17 +30,20 @@ public class UserRegisterApiTest {
     private UserRegisterApi api;
     private UserRegisterService service;
     private UserDto dto;
+    private UserInformationMaker maker;
 
     @Before
     public void setUp(){
         service = Mockito.mock(UserRegisterService.class);
-        api = new UserRegisterApi(service);
+        maker = UserInformatiomMakerFactory.produce();
+        api = new UserRegisterApi(service,maker);
         dto = produceUserDto();
     }
 
     @Test
     public void withRightData_OnRecord_ShouldRecord() throws UserRecordedPreviouslyException {
         final User recordedUser = produceUser();
+
 
         doReturn(recordedUser)
             .when(service)
@@ -51,6 +56,7 @@ public class UserRegisterApiTest {
         assertTrue( returnValue.getBody() instanceof UserInformationDto );
 
         final UserInformationDto body = (UserInformationDto) returnValue.getBody();
+        dto.setPassword(null);
         assertEquals(dto, body.getUser());
 
         UserConstants.validateUserReturn(body);

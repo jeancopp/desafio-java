@@ -28,7 +28,7 @@ public class User implements Serializable{
 
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPhone> phones;
 
     private LocalDateTime created;

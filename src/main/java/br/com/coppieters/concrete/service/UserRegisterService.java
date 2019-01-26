@@ -10,6 +10,7 @@ import br.com.coppieters.concrete.service.maker.UserPhoneMaker;
 import lombok.extern.jbosslog.JBossLog;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,11 +47,14 @@ public class UserRegisterService {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .phones(phoneMaker.make(dto))
+                .password(passwordEncrypter.apply(dto.getPassword()))
                 .build();
         user.getPhones().forEach( p -> p.setUser(user) );
 
-        String token = tokenGenerator.provide(user);
-        user.setToken(token);
+        log.trace("Generated token");
+        final String token = tokenGenerator.provide(user);
+        final String encToken = passwordEncrypter.apply(token);
+        user.setToken(encToken);
 
         log.trace("Saving user on database");
         final User savedUser = repository.save(user);
@@ -59,13 +64,16 @@ public class UserRegisterService {
     }
 
     @Autowired
-    public UserRegisterService(UserRepository repository, UserPhoneMaker phoneMaker, TokenGeneratorService tokenGenerator) {
+    public UserRegisterService(UserRepository repository,
+                               UserPhoneMaker phoneMaker, TokenGeneratorService tokenGenerator, @Qualifier("PasswordEncrypter") Function<String, String> passwordEncrypter) {
         this.repository = repository;
         this.phoneMaker = phoneMaker;
         this.tokenGenerator = tokenGenerator;
+        this.passwordEncrypter = passwordEncrypter;
     }
 
     private final UserRepository repository;
     private final UserPhoneMaker phoneMaker;
     private final TokenGeneratorService tokenGenerator;
+    private final Function<String, String> passwordEncrypter;
 }

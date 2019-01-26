@@ -14,4 +14,9 @@ public interface UserRepository
 
     @Query(" select u from User u where upper(u.email) = upper(:email) ")
     Optional<User> findByEmail(@Param("email") String email);
+
+    @Query(" select u from User u where upper(u.token) = upper(:token) ")
+    Optional<User> findByToken(@Param("token") String token);
+
+
 }

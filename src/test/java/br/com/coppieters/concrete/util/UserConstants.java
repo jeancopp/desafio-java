@@ -1,9 +1,10 @@
-package br.com.coppieters.concrete;
+package br.com.coppieters.concrete.util;
 
 import br.com.coppieters.concrete.domain.dto.PhoneDto;
 import br.com.coppieters.concrete.domain.dto.UserDto;
 import br.com.coppieters.concrete.domain.dto.UserInformationDto;
 import br.com.coppieters.concrete.domain.model.User;
+import br.com.coppieters.concrete.domain.model.UserPhone;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class UserConstants {
                 .created(CREATED_DATE)
                 .lastLogin(LAST_LOGIN_DATE)
                 .token(TOKEN)
+                .phones(Arrays.asList(UserPhone.builder().ddd("21").number("987654321").build()))
                 .build();
     }
 

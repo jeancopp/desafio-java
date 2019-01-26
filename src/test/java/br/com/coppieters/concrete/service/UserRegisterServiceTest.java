@@ -1,6 +1,5 @@
 package br.com.coppieters.concrete.service;
 
-import br.com.coppieters.concrete.UserConstants;
 import br.com.coppieters.concrete.domain.dto.UserDto;
 import br.com.coppieters.concrete.domain.exception.UserRecordedPreviouslyException;
 import br.com.coppieters.concrete.domain.model.User;
@@ -16,7 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static br.com.coppieters.concrete.UserConstants.*;
+import static br.com.coppieters.concrete.util.UserConstants.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
@@ -27,13 +26,15 @@ public class UserRegisterServiceTest {
     private UserRepository repository;
     private UserPhoneMaker phoneMaker;
     private TokenGeneratorService tokenGenerator;
+    private PasswordEncrypter passwordEncrypter;
 
     @Before
     public void setUp(){
         this.repository = Mockito.mock(UserRepository.class);
         this.phoneMaker = Mockito.mock(UserPhoneMaker.class);
         this.tokenGenerator = Mockito.mock(TokenGeneratorService.class);
-        this.service = new UserRegisterService(repository, phoneMaker, tokenGenerator);
+        this.passwordEncrypter = new PasswordEncrypter();
+        this.service = new UserRegisterService(repository, phoneMaker, tokenGenerator, passwordEncrypter);
     }
 
     @Test
