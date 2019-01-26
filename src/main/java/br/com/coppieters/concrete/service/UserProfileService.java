@@ -41,7 +41,7 @@ public class UserProfileService {
             throw exception;
         }
 
-        long differenceBetweenLastLoginAndNow = ChronoUnit.MINUTES.between(LocalDateTime.now(), user.getLastLogin());
+        long differenceBetweenLastLoginAndNow = Math.abs(ChronoUnit.MINUTES.between(LocalDateTime.now(), user.getLastLogin()));
         if(differenceBetweenLastLoginAndNow > 30){
             throw new ExpiredSessionException("Sessão inválida");
         }

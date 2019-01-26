@@ -3,6 +3,7 @@ package br.com.coppieters.concrete.api;
 import br.com.coppieters.concrete.domain.dto.ErrorMessageDto;
 import br.com.coppieters.concrete.domain.dto.UserInformationDto;
 import br.com.coppieters.concrete.domain.exception.ExpiredSessionException;
+import br.com.coppieters.concrete.domain.exception.InvalidUserDataException;
 import br.com.coppieters.concrete.domain.exception.UnauthorizedTokenException;
 import br.com.coppieters.concrete.domain.model.User;
 import br.com.coppieters.concrete.service.UserProfileService;
@@ -30,7 +31,7 @@ public class UserProfileApi {
             UserInformationDto response = informationMaker.make(user);
 
             return new ResponseEntity<>( response, HttpStatus.OK );
-        }catch (UnauthorizedTokenException|ExpiredSessionException e){
+        }catch (ExpiredSessionException|InvalidUserDataException| UnauthorizedTokenException e){
             final ErrorMessageDto message = new ErrorMessageDto(e.getMessage());
             return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
         }catch (Exception e){
